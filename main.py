@@ -12,6 +12,7 @@ from text import Texts
 from DML import insert_product_data , insert_users_data, edit_name, edit_phone, edit_address, insert_cart_shopping_data, insert_cart_item_data, edit_cart_item, delete_cart
 from DQL import get_product_info , get_all_users, get_products_cat, get_new_products, search_products, get_users, get_cart_shopping, get_cart_item
 import os
+from invoice import create_invoice
 
 #setup_proxy(
 #    proxy_token=os.environ.get("PROXY_TOKEN") ,
@@ -296,6 +297,15 @@ def callback_query_handler_method(call):
                 del shopping_cart[cid][pid]
         bot.delete_message(cid, mid)
         bot.answer_callback_query(call_id, Texts['delete_pro_cart'])
+
+    elif data=='سفارش':
+        invoice_f= create_invoice(cid)
+        if invoice_f:
+            with open(invoice_f, "rb") as f:
+                bot.send_document(cid, f, caption=Texts['factor_order'])
+        else:
+            bot.answer_callback_query(call_id, Texts['empty_cart'])
+
 
     
 
