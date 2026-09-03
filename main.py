@@ -237,15 +237,18 @@ def callback_query_handler_method(call):
         if not item:
             bot.send_message(cid, Texts['basket'])
             return
-        text= f'{Texts['edit_orders']} : \n'
-        markup= InlineKeyboardMarkup()
+        num= 1
         for i in item:
             products= get_product_info(i['prod_id'])
-            text += clean_text(products)
-            markup.add(InlineKeyboardButton('➖', callback_data=f'change_{i['prod_id']}', style='danger'), InlineKeyboardButton(str(i['number']), callback_data=f'no', style='primary'), InlineKeyboardButton('➕', callback_data=f'change_{i['prod_id']}', style='success'))
+            text =f"{num}. {clean_text(products['name'])}"
+            markup= InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('➖', callback_data=f'change_{i['prod_id']}', style='danger'), InlineKeyboardButton(str(i['number']), callback_data='no', style='primary'), InlineKeyboardButton('➕', callback_data=f'change_{i['prod_id']}', style='success'))
             markup.add(InlineKeyboardButton(Texts['delete_pro'], callback_data=f"delete_{i['prod_id']}"))
-            markup.add(InlineKeyboardButton(Texts['back_basket'], callback_data='cancel_basket_menu'))
-            bot.edit_message_text(text, cid, mid, reply_markup=markup)
+            bot.send_message(cid, text, reply_markup=markup)
+            num +=1
+        markup= InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton(Texts['back_basket'], callback_data='cancel_basket_menu'))
+        bot.send_message(cid, Texts['edit_orders'], reply_markup=markup)
 
 
 
