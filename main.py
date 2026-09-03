@@ -224,6 +224,32 @@ def callback_query_handler_method(call):
                 user_steps[cid]= 'edit_address'
     elif data=='cancel_profile':
         show_profile(cid)
+    elif data=='cancel_basket_menu':
+        bot.delete_message(cid, mid)
+        basket_menu(cid)
+# ویرایش سفارشات
+    elif data=='ویرایش':
+        cart= get_cart_shopping(cid)
+        if not cart:
+            bot.send_message(cid, Texts['basket'])
+            return
+        item=  get_cart_item(cart['id'])
+        if not item:
+            bot.send_message(cid, Texts['basket'])
+            return
+        text= f'{Texts['edit_orders']} : \n'
+        markup= InlineKeyboardMarkup()
+        for i in item:
+            products= get_product_info(i['prod_id'])
+            text += clean_text(products)
+            markup.add(InlineKeyboardButton('➖', callback_data=f'change_{i['prod_id']}', style='danger'), InlineKeyboardButton(str(i['number']), callback_data=f'no', style='primary'), InlineKeyboardButton('➕', callback_data=f'change_{i['prod_id']}', style='success'))
+            markup.add(InlineKeyboardButton(Texts['delete_pro'], callback_data=f"delete_{i['prod_id']}"))
+            markup.add(InlineKeyboardButton(Texts['back_basket'], callback_data='cancel_basket_menu'))
+            bot.edit_message_text(text, cid, mid, reply_markup=markup)
+
+
+
+
 
     
 
@@ -324,8 +350,6 @@ def basket_menu(cid):
     markup.add(InlineKeyboardButton(Texts['gu_factor'], callback_data='سفارش'))
     markup.add(InlineKeyboardButton(Texts['back'],callback_data='cancel_main_menu', style='primary'))
     bot.send_message(cid, text, parse_mode='MarkdownV2' , reply_markup=markup)
-
-
 
 
 # پروفایل
