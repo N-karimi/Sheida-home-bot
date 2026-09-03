@@ -319,12 +319,11 @@ def basket_menu(cid):
     text += f"قیمت نهایی: {total_price:,} تومان"
     bot.send_message(cid, text, parse_mode='MarkdownV2')
 
-
-#    markup= InlineKeyboardMarkup()
-#    markup.add(InlineKeyboardButton('ویرایش و جزئیات سفارش ✏️', callback_data='ویرایش'))
+    markup= InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton(Texts['edit_orders'], callback_data='ویرایش'))
 #    markup.add(InlineKeyboardButton('ثبت کد تخفیف 🎟', callback_data='تخفیف'))
-#    markup.add(InlineKeyboardButton('ثبت سفارش 🧾', callback_data='سفارش'))
-#    markup.add(InlineKeyboardButton(Texts['back'],callback_data='cancel_main_menu', style='primary'))
+    markup.add(InlineKeyboardButton(Texts['gu_factor'], callback_data='سفارش'))
+    markup.add(InlineKeyboardButton(Texts['back'],callback_data='cancel_main_menu', style='primary'))
 
 # پروفایل
 @bot.message_handler(func=lambda message: message.text=='پروفایل')

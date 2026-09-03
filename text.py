@@ -76,5 +76,6 @@ category: دسته بندی  ''',
    'support'            : "پشتیبانی 🗣",
    'edit_information'   : "ویرایش اطلاعات ✏️",
    'orders_history'     : "تاریخچه سفارشات 📄",
+   'edit_orders'        : "ویرایش و جزئیات سفارش ✏️",
 
   }
