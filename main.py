@@ -31,6 +31,7 @@ chanel_cid=  -1004382780905
 shopping_cart= dict()
 card_number= '6219861979524559'
 card_name= Texts['card_name']
+orders= dict()
 
 
 commands={ 'start'             : 'شروع ربات',
@@ -532,7 +533,10 @@ def order_handler(message):
     cid= message.chat.id
     markup= InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_main_menu', style='primary'))
-    bot.send_message(cid, Texts['order'], reply_markup=markup)    
+    if cid in orders:
+        bot.send_message(cid,Texts['order'], reply_markup= markup)
+    else:
+        bot.send_message(cid, Texts['no_order'],reply_markup=markup)
     
 # راهنمای ربات 
 @bot.message_handler(func=lambda message: message.text== 'راهنما ربات')
@@ -607,6 +611,7 @@ def content_photo_handler(message):
             bot.send_message(cid, f'product inserted at ID: {pid}\nname: {product_name}, desc: {product_desc}, price: {product_price}, inv: {product_inventory}')
             bot.send_photo(chanel_store, file_id, caption=gen_channel_product_caption(pid), parse_mode='MarkdownV2')
     elif user_steps.get(cid)=='send_receipt':
+        orders[cid]=True
         bot.send_photo(chanel_cid, file_id, caption='''
 رسید جدید =>
 نام کاربر : {message.from_user.first_name}
