@@ -9,7 +9,7 @@ import telebot
 from telebot.types import ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton
 from text import Texts
 #from requests_forwarder import setup_proxy
-from DML import insert_product_data , insert_users_data, edit_name, edit_phone, edit_address, insert_cart_shopping_data, insert_cart_item_data
+from DML import insert_product_data , insert_users_data, edit_name, edit_phone, edit_address, insert_cart_shopping_data, insert_cart_item_data, edit_cart_item, delete_cart
 from DQL import get_product_info , get_all_users, get_products_cat, get_new_products, search_products, get_users, get_cart_shopping, get_cart_item
 import os
 
@@ -233,22 +233,113 @@ def callback_query_handler_method(call):
         if not cart:
             bot.send_message(cid, Texts['basket'])
             return
-        item=  get_cart_item(cart['id'])
+        item= get_cart_item(cart['id'])
         if not item:
             bot.send_message(cid, Texts['basket'])
             return
-        num= 1
+        products_carts= dict()
         for i in item:
-            products= get_product_info(i['prod_id'])
-            text =f"{num}. {clean_text(products['name'])}"
+            products_carts.setdefault(i['prod_id'], 0)
+            products_carts[i['prod_id']] += i['number']
+
+        number= 1
+        for pid in products_carts:
+            qty= products_carts[pid]
+            products= get_product_info(pid)
+            text= f"{number}. {clean_text(products['name'])}"
             markup= InlineKeyboardMarkup()
-            markup.add(InlineKeyboardButton('➖', callback_data=f'change_{i['prod_id']}', style='danger'), InlineKeyboardButton(str(i['number']), callback_data='no', style='primary'), InlineKeyboardButton('➕', callback_data=f'change_{i['prod_id']}', style='success'))
-            markup.add(InlineKeyboardButton(Texts['delete_pro'], callback_data=f"delete_{i['prod_id']}"))
+            markup.add(InlineKeyboardButton('➖',callback_data=f'edit_{pid}_{qty-1}',style='danger'), InlineKeyboardButton(str(qty),callback_data='no',style='primary'), InlineKeyboardButton('➕',callback_data=f'edit_{pid}_{qty+1}',style='success') )
+
+            markup.add( InlineKeyboardButton(Texts['delete_pro'],callback_data=f'delete_{pid}') )
             bot.send_message(cid, text, reply_markup=markup)
-            num +=1
+
+            number +=1
         markup= InlineKeyboardMarkup()
-        markup.add(InlineKeyboardButton(Texts['back_basket'], callback_data='cancel_basket_menu'))
+        markup.add(
+        InlineKeyboardButton(Texts['back_basket'],callback_data='cancel_basket_menu') )
         bot.send_message(cid, Texts['edit_orders'], reply_markup=markup)
+
+    elif data.startswith('edit_'):
+        _,pid, qty = data.split('_')
+        pid= int(pid)
+        qty= int(qty)
+
+        if qty==0:
+            bot.answer_callback_query(call_id,Texts['delete_complete'])
+            return
+
+        cart= get_cart_shopping(cid)
+        if not cart:
+            return
+
+        edit_cart_item(cart['id'], pid, qty)
+
+# تغییر در سبد خرید
+        shopping_cart.setdefault(cid, {})
+        shopping_cart[cid][pid]= qty
+# تغییر عدد وسط
+        markup= InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton('➖',callback_data=f'edit_{pid}_{qty-1}',style='danger'), InlineKeyboardButton(str(qty),callback_data='no', style='primary'), InlineKeyboardButton( '➕',callback_data=f'edit_{pid}_{qty+1}', style='success') )
+
+        markup.add(InlineKeyboardButton(Texts['delete_pro'],callback_data=f'delete_{pid}'))
+        bot.edit_message_reply_markup(cid,mid,reply_markup=markup)
+        bot.answer_callback_query( call_id, f'تعداد: {qty}')
+
+
+    elif data.startswith('delete_'):
+        _,pid= data.split('_')
+        pid= int(pid)
+        cart= get_cart_shopping(cid)
+        if not cart:
+            return
+        delete_cart(cart['id'], pid)
+# حذف از سبد خرید
+        if cid in shopping_cart:
+            if pid in shopping_cart[cid]:
+                del shopping_cart[cid][pid]
+        bot.delete_message(cid, mid)
+        bot.answer_callback_query(call_id, Texts['delete_pro_cart'])
+#    elif data=='ویرایش':
+#        cart= get_cart_shopping(cid)
+#        if not cart:
+#            bot.send_message(cid, Texts['basket'])
+#            return
+#        item=  get_cart_item(cart['id'])
+#        if not item:
+#            bot.send_message(cid, Texts['basket'])
+#            return
+#        products_carts= dict()
+#        for i in item:
+#            products_carts.setdefault(i['prod_id'], 0)
+#            products_carts[i['prod_id']]+= i['number']
+#            number= 1
+#            for pid in products_carts:
+#                qty= products_carts[pid]
+#                products= get_product_info(pid)
+#            text =f"{number}. {clean_text(products['name'])}"
+#
+#            markup= InlineKeyboardMarkup()
+#            markup.add(InlineKeyboardButton('➖', callback_data=f'edit_{pid}_{qty-1}', style='danger'), InlineKeyboardButton(str(qty), callback_data='no', style='primary'), InlineKeyboardButton('➕', callback_data=f'edit_{pid}_{qty+1}', style='success'))
+#            markup.add(InlineKeyboardButton(Texts['delete_pro'], callback_data=f"delete_{pid}"))
+#            bot.send_message(cid, text, reply_markup=markup)
+#            number +=1
+#        markup= InlineKeyboardMarkup()
+#        markup.add(InlineKeyboardButton(Texts['back_basket'], callback_data='cancel_basket_menu'))
+#        bot.send_message(cid, Texts['edit_orders'], reply_markup=markup)
+#    elif data.startswith('edit_'):
+#        _,pid, qty = data.split('_')
+#        pid= int(pid)
+#        qty= int(qty)
+#        if qty==0:
+#            bot.answer_callback_query(call_id, Texts['delete_complete'])
+#            return
+#        cart= get_cart_shopping(cid)
+#        if not cart:
+#            return
+#        edit_cart_item(cart['id'], pid, qty)
+#        bot.answer_callback_query(call_id, f'تعداد:{qty}')        
+
+
 
 
 

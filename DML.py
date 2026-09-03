@@ -115,3 +115,22 @@ def edit_address(cid, address):
    cur.close()
    conn.close()
 
+def edit_cart_item(cart_id, prod_id, number):
+   conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+   cur= conn.cursor()
+   SQL_QUERY= "DELETE FROM cart_item WHERE cart_id=%s AND prod_id=%s"
+   cur.execute(SQL_QUERY, (cart_id, prod_id))
+   SQL_QUERY="INSERT INTO cart_item (cart_id, prod_id, number) VALUES (%s,%s,%s)"
+   cur.execute(SQL_QUERY, (cart_id, prod_id, number))
+   conn.commit()
+   cur.close()
+   conn.close()
+
+def delete_cart(cart_id, prod_id):
+   conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+   cur= conn.cursor()
+   SQL_QUERY= "DELETE FROM cart_item WHERE cart_id=%s AND prod_id=%s"
+   cur.execute(SQL_QUERY, (cart_id, prod_id))
+   conn.commit()
+   cur.close()
+   conn.close()
