@@ -1,10 +1,17 @@
 import openpyxl
 from DQL import get_users, get_cart_shopping, get_cart_item, get_product_info
+import os
+from text import Texts
 
 
 def create_invoice(cid):
     wb = openpyxl.load_workbook('factor.xlsm', keep_vba=True)
     sheet = wb['Invoice']
+
+#اطلاعات فروشنده
+    sheet['D3'].value= 'Sheida Home'
+    #sheet['D7'].value= Texts['address_store']
+    
 
 # اطلاعات مشتری
     user = get_users(cid)
@@ -48,9 +55,11 @@ def create_invoice(cid):
     sheet['I41'].value = total_price
 
 # ذخیره فاکتور
+    if not os.path.exists('invoices'):
+        os.mkdir('invoices')
     file_name = f'invoice_{cid}.xlsm'
 
     wb.save(file_name)
     wb.close()
 
-    return file_name
+    return file_name, total_price

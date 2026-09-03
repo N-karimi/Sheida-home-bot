@@ -29,6 +29,8 @@ user_steps= dict()  #دیکشنری که مرحله هر کاربر را نگه 
 forward_message=dict() # پیام ادمین برای کاربر
 chanel_cid=  -1004382780905
 shopping_cart= dict()
+card_number= '6219861979524559'
+card_name= Texts['card_name']
 
 
 commands={ 'start'             : 'شروع ربات',
@@ -299,12 +301,24 @@ def callback_query_handler_method(call):
         bot.answer_callback_query(call_id, Texts['delete_pro_cart'])
 
     elif data=='سفارش':
-        invoice_f= create_invoice(cid)
+        invoice_f, total_price= create_invoice(cid)
         if invoice_f:
             with open(invoice_f, "rb") as f:
                 bot.send_document(cid, f, caption=Texts['factor_order'])
+
+            markup= InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton(Texts['send_receipt'], callback_data='send_receipt'))
+            markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_main_menu'))
+            bot.send_message(cid, f''' مبلغ قابل پرداخت: {total_price:,} تومان
+شماره کارت: {card_number}
+به نام: {card_name}
+ ''', reply_markup= markup)
         else:
             bot.answer_callback_query(call_id, Texts['empty_cart'])
+
+    elif data=='send_receipt':
+        bot.answer_callback_query(call_id, Texts['receipt'])
+        user_steps[cid]= 'send_receipt'
 
 
     
@@ -592,6 +606,15 @@ def content_photo_handler(message):
         if pid:
             bot.send_message(cid, f'product inserted at ID: {pid}\nname: {product_name}, desc: {product_desc}, price: {product_price}, inv: {product_inventory}')
             bot.send_photo(chanel_store, file_id, caption=gen_channel_product_caption(pid), parse_mode='MarkdownV2')
+    elif user_steps.get(cid)=='send_receipt':
+        bot.send_photo(chanel_cid, file_id, caption='''
+رسید جدید =>
+نام کاربر : {message.from_user.first_name}
+شناسه کاربر: {cid}
+بررسی کنید برای درستی فاکتور
+''')
+        bot.send_message(cid, Texts['check_receipt'])
+        user_steps.pop(cid)
 
 
 #گرفتن جواب ادمین 
