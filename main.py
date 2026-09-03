@@ -211,6 +211,27 @@ def callback_query_handler_method(call):
         markup= InlineKeyboardMarkup()
         markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_handle', style='primary'))
         bot.send_message(cid, Texts['hendel_invite'], reply_markup=markup)
+    elif data=='hendel_search':
+        markup= InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_handle', style='primary'))
+        bot.send_message(cid, Texts['hendel_search'], reply_markup=markup)
+    elif data=='hendel_order':
+        markup= InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_handle', style='primary'))
+        bot.send_message(cid, Texts['hendel_order'], reply_markup=markup)
+    elif data=='hendel_saved':
+        markup= InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_handle', style='primary'))
+        bot.send_message(cid, Texts['hendel_saved'], reply_markup=markup)
+    elif data=='hendel_profile':
+        markup= InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_handle', style='primary'))
+        bot.send_message(cid, Texts['hendel_profile'], reply_markup=markup)
+    elif data=='hendel_shop':
+        markup= InlineKeyboardMarkup()
+        markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_handle', style='primary'))
+        bot.send_message(cid, Texts['hendel_shop'], reply_markup=markup)
+
 #ویرایش اطلاعات
     elif data=='edit_profile':
         edit_profile(cid)
