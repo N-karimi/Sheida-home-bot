@@ -240,8 +240,8 @@ def send_welcome(message):
             bot.send_photo(cid, product_info['file_id'], caption=gen_product_caption(pid), reply_markup=gen_product_markup(pid))
             return
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton('عضویت در کانال',url='https://t.me/sheida_home', style='primary'))
-    markup.add(InlineKeyboardButton('عضو شدم',callback_data= 'be_member', style='success'))    
+    markup.add(InlineKeyboardButton(Texts['join_ch'],url='https://t.me/sheida_home', style='primary'))
+    markup.add(InlineKeyboardButton(Texts['join'],callback_data= 'be_member', style='success'))    
     with open("images/photo_start.jpg",'rb')as f:
         bot.send_photo(cid , f, caption=Texts['welcome'],reply_markup=markup)
 
@@ -350,8 +350,8 @@ def show_profile(cid):
  لطفا اگر اطلاعات تان کامل نیست کامل کنید ‼️
 """
     markup= InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton('ویرایش اطلاعات ✏️', callback_data='edit_profile'))
-    markup.add(InlineKeyboardButton('تاریخچه سفارشات 📄', callback_data='order_profile'))
+    markup.add(InlineKeyboardButton(Texts['edit_information'], callback_data='edit_profile'))
+    markup.add(InlineKeyboardButton(Texts['orders_history'], callback_data='order_profile'))
     markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_main_menu', style='primary'))    
     bot.send_message(cid, text, reply_markup=markup)
 
@@ -425,7 +425,7 @@ def search_pro(message):
 def about_handler(message):
     cid= message.chat.id
     markup= InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton('پشتیبانی 🗣', callback_data='support'))
+    markup.add(InlineKeyboardButton(Texts['support'], callback_data='support'))
     markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_main_menu', style='primary'))
     sent_m=bot.copy_message(cid, chanel_cid, chanel_m['about_us'])
     bot.edit_message_reply_markup(chat_id=cid, message_id= sent_m.message_id, reply_markup=markup)
@@ -443,13 +443,13 @@ def order_handler(message):
 def handel_handler(message):
     cid= message.chat.id
     markup= InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton('افزودن محصول به سبد خرید', callback_data='hendel_basket', style='success'))
-    markup.add(InlineKeyboardButton('جست و جوی محصول مورد نظر', callback_data='hendel_search', style='danger'))
-    markup.add(InlineKeyboardButton('پیگیری سفارش', callback_data='hendel_order', style='success'))
-    markup.add(InlineKeyboardButton('ثبت سفارش', callback_data='hendel_saved', style='danger'))
-    markup.add(InlineKeyboardButton('تکمیل اطلاعات پروفایل', callback_data='hendel_profile', style='success'))
-    markup.add(InlineKeyboardButton('درباره فروشگاه', callback_data='hendel_shop', style='danger'))
-    markup.add(InlineKeyboardButton('دعوت دوستان و آشنایان', callback_data='hendel_invite', style='success'))
+    markup.add(InlineKeyboardButton(Texts['gu_add'], callback_data='hendel_basket', style='success'))
+    markup.add(InlineKeyboardButton(Texts['gu_search'], callback_data='hendel_search', style='danger'))
+    markup.add(InlineKeyboardButton(Texts['gu_order'], callback_data='hendel_order', style='success'))
+    markup.add(InlineKeyboardButton(Texts['gu_factor'], callback_data='hendel_saved', style='danger'))
+    markup.add(InlineKeyboardButton(Texts['gu_profile'], callback_data='hendel_profile', style='success'))
+    markup.add(InlineKeyboardButton(Texts['gu_store'], callback_data='hendel_shop', style='danger'))
+    markup.add(InlineKeyboardButton(Texts['gu_invite'], callback_data='hendel_invite', style='success'))
     markup.add(InlineKeyboardButton(Texts['back'], callback_data='cancel_main_menu', style='primary'))
     bot.send_message(cid, Texts['help_robot'], reply_markup=markup)
 
@@ -469,12 +469,12 @@ def handle_support_message(message):
         forwarder= bot.forward_message(admin_cid, cid, message.message_id)#ارسال پیام کاربر برای ادمین
         forward_message[forwarder.message_id]= cid #شماره پیام برای ادمین
         markup= InlineKeyboardMarkup()
-        markup.add(InlineKeyboardButton('پاسخ دادن', callback_data=f'reply_{cid}'))
+        markup.add(InlineKeyboardButton(Texts['reply'], callback_data=f'reply_{cid}'))
         bot.send_message(admin_cid, Texts['admin_answer'], reply_markup=markup)
     except:
         bot.copy_message(admin_cid, cid, message.message_id)
         markup= InlineKeyboardMarkup()
-        markup.add(InlineKeyboardButton('پاسخ دادن', callback_data=f'reply_{cid}'))
+        markup.add(InlineKeyboardButton(Texts['reply'], callback_data=f'reply_{cid}'))
         bot.send_message(admin_cid, Texts['admin_answer'], reply_markup=markup)
 
     bot.send_message(cid, Texts['forward_su'])
