@@ -83,15 +83,23 @@ def insert_cart_shopping_data(user_id, date):
    conn.close()
    return cart_id
 
-
 def insert_cart_item_data(cart_id, prod_id, number=1):
    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
    cur = conn.cursor()
-   SQL_QUERY = "INSERT INTO cart_item (cart_id, prod_id, number) VALUES (%s,%s,%s);"
-   cur.execute(SQL_QUERY, (cart_id, prod_id, number))
+
+   SQL_QUERY = "SELECT MAX(id) FROM cart_item"
+   cur.execute(SQL_QUERY)
+   result = cur.fetchone()
+   if result[0] is None:
+      item_id = 1
+   else:
+      item_id = result[0] + 1
+   SQL_QUERY = "INSERT INTO cart_item (id, cart_id, prod_id, number) VALUES (%s, %s, %s, %s);"
+   cur.execute(SQL_QUERY, (item_id, cart_id, prod_id, number))
    conn.commit()
    cur.close()
    conn.close()
+
 
 def edit_name(cid, name):
    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
