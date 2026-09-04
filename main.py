@@ -350,6 +350,12 @@ def callback_query_handler_method(call):
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     cid= message.chat.id
+    first_name=  message.from_user.first_name
+    user_name= message.from_user.username
+    if cid not in known_users:
+        insert_users_data(cid, first_name, user_name)
+        known_users.append(cid)
+
     if len(message.text.split())>1:
         start_value = message.text.split()[1]
         if start_value.startswith('buy'):
