@@ -4,7 +4,7 @@ import mysql.connector
 from config import *
 
 def get_product_info(pid):
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY = "SELECT * FROM PRODUCT WHERE ID=%s"
     cur.execute(SQL_QUERY, (pid,))
@@ -15,7 +15,7 @@ def get_product_info(pid):
 
 #دسته بندی محصولات
 def get_products_cat(category):
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY = "SELECT * FROM PRODUCT WHERE TRIM(category)=%s"
     cur.execute(SQL_QUERY, (category,))
@@ -26,7 +26,7 @@ def get_products_cat(category):
 
 #جدیدترین محصولات
 def get_new_products():
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY = "SELECT * FROM PRODUCT ORDER BY ID DESC LIMIT 5"
     cur.execute(SQL_QUERY)
@@ -37,7 +37,7 @@ def get_new_products():
 
 #جست و جو محصولات 
 def search_products(name):
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY = "SELECT * FROM PRODUCT WHERE name LIKE %s"
     cur.execute(SQL_QUERY, (f"%{name}%",))
@@ -48,7 +48,7 @@ def search_products(name):
 
 # گرفتن اطلاعات کاربران
 def get_users(cid):
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY = "SELECT * FROM USERS WHERE CID=%s"
     cur.execute(SQL_QUERY, (cid,))
@@ -59,7 +59,7 @@ def get_users(cid):
     
 
 def get_all_users():
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY= "SELECT CID FROM USERS;"
     cur.execute(SQL_QUERY)
@@ -69,7 +69,7 @@ def get_all_users():
     return [ row['CID'] for row in users]
 
 def get_cart_shopping(user_id):
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY= "SELECT * FROM cart_shopping WHERE user_id=%s"
     cur.execute(SQL_QUERY,(user_id,))
@@ -79,7 +79,7 @@ def get_cart_shopping(user_id):
     return cart_shop
 
 def get_cart_item(cart_id):
-    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database)
+    conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
     SQL_QUERY= "SELECT * FROM cart_item WHERE cart_id=%s"
     cur.execute(SQL_QUERY, (cart_id,))

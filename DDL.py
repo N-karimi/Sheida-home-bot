@@ -15,7 +15,7 @@ def drop_n_create_database(Database_name):
     
 #balance برای خرید و چک کردن کارت به کارت است
 def create_users_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table users (
@@ -40,7 +40,7 @@ def create_users_table():
 
 
 def create_category_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table category (
@@ -56,7 +56,7 @@ def create_category_table():
 
 
 def create_product_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table product (
@@ -80,7 +80,7 @@ def create_product_table():
 
 
 def create_favorite_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table favorite (
@@ -99,7 +99,7 @@ def create_favorite_table():
 
 
 def create_orders_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table orders (
@@ -120,7 +120,7 @@ def create_orders_table():
 
 
 def create_order_item_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table order_item (
@@ -141,7 +141,7 @@ def create_order_item_table():
 
 
 def create_cart_shopping_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table cart_shopping (
@@ -159,7 +159,7 @@ def create_cart_shopping_table():
 
 
 def create_cart_item_table():
-    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database)
+    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
     cur = conn.cursor()
     cur.execute("""
                 create table cart_item (
@@ -180,7 +180,7 @@ def create_cart_item_table():
 
 
 if __name__ == '__main__':
-    drop_n_create_database(database)
+    drop_n_create_database(database_name)
     create_users_table()
     create_category_table()
     create_product_table()
