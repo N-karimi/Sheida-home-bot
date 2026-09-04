@@ -90,7 +90,7 @@ def insert_cart_item_data(cart_id, prod_id, number=1):
 def edit_name(cid, name):
    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
    cur = conn.cursor()
-   SQL_QUERY = "UPDATE USERS SET first_name=%s WHERE  cid=%s"
+   SQL_QUERY = "UPDATE users SET first_name=%s WHERE  cid=%s"
    cur.execute(SQL_QUERY, (name,cid))
    conn.commit()
    cur.close()
@@ -99,7 +99,7 @@ def edit_name(cid, name):
 def edit_phone(cid, phone):
    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
    cur = conn.cursor()
-   SQL_QUERY = "UPDATE USERS SET phone=%s WHERE  cid=%s"
+   SQL_QUERY = "UPDATE users SET phone=%s WHERE  cid=%s"
    cur.execute(SQL_QUERY, (phone,cid))
    print(cur.rowcount)
    conn.commit()
@@ -109,7 +109,7 @@ def edit_phone(cid, phone):
 def edit_address(cid, address):
    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
    cur = conn.cursor()
-   SQL_QUERY = "UPDATE USERS SET address=%s WHERE  cid=%s"
+   SQL_QUERY = "UPDATE users SET address=%s WHERE  cid=%s"
    cur.execute(SQL_QUERY, (address,cid))
    conn.commit()
    cur.close()
