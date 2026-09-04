@@ -50,7 +50,7 @@ def search_products(name):
 def get_users(cid):
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM USERS WHERE CID=%s"
+    SQL_QUERY = "SELECT * FROM users WHERE CID=%s"
     cur.execute(SQL_QUERY, (cid,))
     user_inf= cur.fetchone()
     cur.close()
@@ -61,7 +61,7 @@ def get_users(cid):
 def get_all_users():
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY= "SELECT CID FROM USERS;"
+    SQL_QUERY= "SELECT CID FROM users;"
     cur.execute(SQL_QUERY)
     users= cur.fetchall()
     cur.close()
