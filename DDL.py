@@ -70,6 +70,7 @@ def create_product_table():
                     `offer_pro` 	varchar(40),
                     `file_id`       varchar(100),
                     `channel_mid`   int unsigned ,
+                    `category`      varchar(30),
                     `register_date` datetime default current_timestamp,
                     `last_update`   datetime default current_timestamp on update current_timestamp
                 )AUTO_INCREMENT=1;""")
