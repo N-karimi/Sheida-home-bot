@@ -6,7 +6,7 @@ from config import *
 def get_product_info(pid):
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM PRODUCT WHERE ID=%s"
+    SQL_QUERY = "SELECT * FROM product WHERE ID=%s"
     cur.execute(SQL_QUERY, (pid,))
     info = cur.fetchone()
     cur.close()
@@ -17,7 +17,7 @@ def get_product_info(pid):
 def get_products_cat(category):
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM PRODUCT WHERE TRIM(category)=%s"
+    SQL_QUERY = "SELECT * FROM product WHERE TRIM(category)=%s"
     cur.execute(SQL_QUERY, (category,))
     products= cur.fetchall()
     cur.close()
@@ -28,7 +28,7 @@ def get_products_cat(category):
 def get_new_products():
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM PRODUCT ORDER BY ID DESC LIMIT 5"
+    SQL_QUERY = "SELECT * FROM product ORDER BY ID DESC LIMIT 5"
     cur.execute(SQL_QUERY)
     products= cur.fetchall()
     cur.close()
@@ -39,7 +39,7 @@ def get_new_products():
 def search_products(name):
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM PRODUCT WHERE name LIKE %s"
+    SQL_QUERY = "SELECT * FROM product WHERE name LIKE %s"
     cur.execute(SQL_QUERY, (f"%{name}%",))
     products= cur.fetchall()
     cur.close()
