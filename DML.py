@@ -73,6 +73,8 @@ def insert_cart_shopping_data(user_id, date):
    cur.execute(SQL_QUERY)
    result=cur.fetchone()
    if result[0] is None:
+      cart_id= 1
+   else: 
       cart_id= result[0]+1
    SQL_QUERY="INSERT INTO cart_shopping (id, user_id, date) VALUES (%s,%s,%s)"
    cur.execute(SQL_QUERY, (cart_id, user_id, date))
