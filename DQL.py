@@ -6,7 +6,7 @@ from config import *
 def get_product_info(pid):
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM product WHERE ID=%s"
+    SQL_QUERY = "SELECT * FROM product WHERE id=%s"
     cur.execute(SQL_QUERY, (pid,))
     info = cur.fetchone()
     cur.close()
@@ -28,7 +28,7 @@ def get_products_cat(category):
 def get_new_products():
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM product ORDER BY ID DESC LIMIT 5"
+    SQL_QUERY = "SELECT * FROM product ORDER BY id DESC LIMIT 5"
     cur.execute(SQL_QUERY)
     products= cur.fetchall()
     cur.close()
@@ -50,7 +50,7 @@ def search_products(name):
 def get_users(cid):
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY = "SELECT * FROM users WHERE CID=%s"
+    SQL_QUERY = "SELECT * FROM users WHERE cid=%s"
     cur.execute(SQL_QUERY, (cid,))
     user_inf= cur.fetchone()
     cur.close()
