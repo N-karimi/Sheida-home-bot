@@ -69,9 +69,13 @@ def insert_order_item_data(id, order_id, prod_id, price=None, description=None):
 def insert_cart_shopping_data(user_id, date):
    conn = mysql.connector.connection.MySQLConnection(**database_config, database=database_name)
    cur = conn.cursor()
-   SQL_QUERY = "INSERT INTO cart_shopping (user_id, date) VALUES (%s,%s);"
-   cur.execute(SQL_QUERY, (user_id, date))
-   cart_id= cur.lastrowid
+   SQL_QUERY = "SELECT MAX(id) FROM cart_shopping"
+   cur.execute(SQL_QUERY)
+   result=cur.fetchone()
+   if result[0] is None:
+      cart_id= result[0]+1
+   SQL_QUERY="INSERT INTO cart_shopping (id, user_id, date) VALUES (%s,%s,%s)"
+   cur.execute(SQL_QUERY, (cart_id, user_id, date))
    conn.commit()
    cur.close()
    conn.close()
