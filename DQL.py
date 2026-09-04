@@ -61,12 +61,12 @@ def get_users(cid):
 def get_all_users():
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
     cur= conn.cursor(dictionary=True)
-    SQL_QUERY= "SELECT CID FROM users;"
+    SQL_QUERY= "SELECT cid FROM users;"
     cur.execute(SQL_QUERY)
     users= cur.fetchall()
     cur.close()
     conn.close()
-    return [ row['CID'] for row in users]
+    return [ row['cid'] for row in users]
 
 def get_cart_shopping(user_id):
     conn= mysql.connector.connection.MySQLConnection(**database_config, database= database_name)
